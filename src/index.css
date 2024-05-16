@@ -1,0 +1,31 @@
+#board{
+	background-color: #aaa;
+
+	text-align: center;
+	padding: 2em;
+}
+body{
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #333;
+    display: flex;
+    align-items: center; /* vertical */
+    justify-content: center; /* horizontal */
+    height: 100vh;
+    margin: 0;
+}
+* {
+	box-sizing: border-box;
+}
+table {
+  border-collapse: collapse;
+  font-family: "Arial Black", sans-serif;
+}
+td{
+	border: 2px solid black;
+	width:  2em;
+	height: 2em;
+	background-color: #ddd;
+	cursor: normal;
+	user-select: none;
+}
