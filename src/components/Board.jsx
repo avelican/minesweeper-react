@@ -100,10 +100,7 @@ export default function Board() {
   const [counts, setCounts] = useState( Array(TOTAL_CELLS).fill(0) ); // TODO update counts
   const [flags, setFlags] = useState( Array(TOTAL_CELLS).fill(false) ); 
 
-  useEffect( () => {
-    init_counts();
-  }, [mines]); // mines in dependencies array means we recalculate the counts when mines array changes
-  
+
   // Quality of life enhancement: First click must not land on a mine. 
   // (We'll simply move the mine)
   const [firstClick, setFirstClick ] = useState(true);
@@ -111,6 +108,22 @@ export default function Board() {
 
   /////////////
   /// logic
+
+  // recalculate counts every time mines move
+  // e.g. we move a mine if necessary,
+  // to prevent game over on first click
+  useEffect( () => {
+    init_counts();
+  }, [mines]);
+
+  // Any time we uncover a tile, check for win condition
+  // (all non-mine tiles are uncovered)
+  useEffect( () => { 
+    if(check_win()) {
+      // alert('you win')
+     end_game(true);
+    }
+  }, [visible]);
 
 
   function reset_state() {
@@ -286,18 +299,21 @@ export default function Board() {
     } else {
       const [x,y] = getCoords(index);
       flood_fill(x,y);
-      // TODO: 
-      // There's a bug here.
+
+      // NOTE: 
+      // There was a bug here.
       // our `visible` array isn't updated
       // until the next time the component renders.
       // So check_win is operating on stale data.
       // We could update it manually, but that's
       // considered an anti-pattern in React land.
       // I'm not sure what the idiomatic solution is.
-      if(check_win()) {
-        // alert('you win')
-        end_game(true);
-      }
+
+      // // NOTE: moved to useEffect
+      // if(check_win()) {
+      //   // alert('you win')
+      //   end_game(true);
+      // }
     }
   }
 
